@@ -8,12 +8,11 @@ using Volo.Abp.Application.Services;
 
 namespace Acme.Customer.İnterface
 {
-    public interface ICustomerAppService :ICrudAppService<
-        CustomerDTO,
+    public interface IEmailTypeService : ICrudAppService<
+        EmailTypeDTO,
         Guid,
         PagedAndSortedResultRequestDto,
-        CreateUpdateCustomerDTO>
+        CreateUpdateEmailTypeDTO>
     {
-        
     }
 }

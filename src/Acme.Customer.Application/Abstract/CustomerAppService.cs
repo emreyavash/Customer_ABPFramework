@@ -23,5 +23,29 @@ namespace Acme.Customer.Abstract
 
         public CustomerAppService(IRepository<Customers,Guid> repository):base(repository) { 
         }
+
+
+        private bool CheckUnusualName(string firstName)
+        {
+            char[] charArr = firstName.ToCharArray();
+            Array.Sort(charArr);
+            int sayac = 0;
+            for (int i = 1; i < charArr.Length; i++)
+            {
+                if (charArr[i - 1] == charArr[i])
+                    {
+                        sayac++;
+                    }
+            }
+            if (sayac >= 2)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        
     }
 }

@@ -12,14 +12,25 @@ public class CustomerApplicationAutoMapperProfile : Profile
         /* You can configure your AutoMapper mapping configuration here.
          * Alternatively, you can split your mapping configurations
          * into multiple profile classes for a better organization. */
-        CreateMap<Customers,CustomerDTO>();
-        CreateMap<CustomerEmail,CustomerEmailDTO>();
-        CreateMap<CustomerPayment,CustomerPaymentDTO>();
-        CreateMap<CustomerPaymentInfo,CustomerPaymentInfoDTO>();
-        CreateMap<CustomerPhoneNumber,CustomerPhoneNumberDTO>();
-        CreateMap<EmailType,EmailTypeDTO>();
+        CreateMap<CustomerPayment, CustomerPaymentDTO>();
+        CreateMap<CustomerPaymentInfo, CustomerPaymentInfoDTO>();
+        CreateMap<CreateUpdateCustomerPaymentDTO, CustomerPayment>();
+        CreateMap<CreateUpdateCustomerPaymentInfoDTO, CustomerPaymentInfo>();
+
+        CreateMap<CustomerPhoneNumber, CustomerPhoneNumberDTO>();
         CreateMap<PhoneType, PhoneTypeDTO>();
+        CreateMap<CreateUpdateCustomerPhoneNumberDTO, CustomerPhoneNumber>();
+        CreateMap<CreateUpdatePhoneTypeDTO, PhoneType>();
+
+        CreateMap<Customers,CustomerDTO>();
         CreateMap<CreateUpdateCustomerDTO, Customers>();
+
+        CreateMap<CustomerEmail,CustomerEmailDTO>();
+        CreateMap<EmailType, EmailTypeDTO>();
+        CreateMap<CreateUpdateCustomerEmailDTO, CustomerEmail>();
+        CreateMap<CreateUpdateEmailTypeDTO,EmailType>();
+
+        
 
     }
 }

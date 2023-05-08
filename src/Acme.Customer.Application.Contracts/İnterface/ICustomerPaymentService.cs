@@ -8,12 +8,11 @@ using Volo.Abp.Application.Services;
 
 namespace Acme.Customer.İnterface
 {
-    public interface ICustomerAppService :ICrudAppService<
-        CustomerDTO,
+    public interface ICustomerPaymentService : ICrudAppService<
+        CustomerPaymentDTO,
         Guid,
         PagedAndSortedResultRequestDto,
-        CreateUpdateCustomerDTO>
+        CreateUpdateCustomerPaymentDTO>
     {
-        
     }
 }
