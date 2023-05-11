@@ -28,12 +28,14 @@ namespace Acme.Customer.Abstract
         private bool CheckUnusualName(string firstName)
         {
             char[] charArr = firstName.ToCharArray();
+            char[] sesliHarfler = { 'a', 'e', 'ı', 'i', 'o', 'ö', 'u', 'ü' };
             Array.Sort(charArr);
             int sayac = 0;
             for (int i = 1; i < charArr.Length; i++)
             {
                 if (charArr[i - 1] == charArr[i])
                     {
+                    
                         sayac++;
                     }
             }

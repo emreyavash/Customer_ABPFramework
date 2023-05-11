@@ -5,7 +5,7 @@ using Volo.Abp.AspNetCore.Mvc;
 namespace Acme.Customer.Controllers
 {
  
-    public class CustomersController : AbpController
+    public class CustomerController : AbpController
     {
         [HttpGet]
         public ActionResult Deneme()

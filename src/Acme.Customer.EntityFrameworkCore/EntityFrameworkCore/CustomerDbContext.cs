@@ -89,12 +89,20 @@ public class CustomerDbContext :
         //    b.ConfigureByConvention(); //auto configure for the base class props
         //    //...
         //});
-        //builder.Entity<CustomerEmail>(b =>
-        //{
-        //    b.ToTable(CustomerConsts.DbTablePrefix + "A", CustomerConsts.DbSchema);
-        //    b.ConfigureByConvention(); //auto configure for the base class props
-        //    //...
-        //});
+        builder.Entity<CustomerEmail>(b =>
+        {
+            b.ToTable("CustomerEmails");
+            b.ConfigureByConvention(); //auto configure for the base class props
+            //...
+
+            b.HasMany(e => e.EmailTypeId).WithOne(x => x.CustomerEmail).HasForeignKey(x => x.Id).IsRequired();
+        });
+        builder.Entity<EmailType>(b =>
+        {
+            b.ToTable("EmailTypes");
+            b.ConfigureByConvention(); //auto configure for the base class props
+            //...
+        });
         //builder.Entity<CustomerPayment>(b =>
         //{
         //    b.ToTable(CustomerConsts.DbTablePrefix + "A", CustomerConsts.DbSchema);
@@ -113,12 +121,7 @@ public class CustomerDbContext :
         //    b.ConfigureByConvention(); //auto configure for the base class props
         //    //...
         //});
-        //builder.Entity<EmailType>(b =>
-        //{
-        //    b.ToTable(CustomerConsts.DbTablePrefix + "A", CustomerConsts.DbSchema);
-        //    b.ConfigureByConvention(); //auto configure for the base class props
-        //    //...
-        //});
+
         //builder.Entity<PhoneType>(b =>
         //{
         //    b.ToTable(CustomerConsts.DbTablePrefix + "A", CustomerConsts.DbSchema);
