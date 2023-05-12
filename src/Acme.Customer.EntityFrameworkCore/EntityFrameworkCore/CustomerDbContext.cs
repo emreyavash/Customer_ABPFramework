@@ -1,5 +1,6 @@
 ﻿using Acme.Customer.Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.Data;
@@ -83,50 +84,53 @@ public class CustomerDbContext :
 
         /* Configure your own tables/entities inside here */
 
-        //builder.Entity<Customers>(b =>
-        //{
-        //    b.ToTable(CustomerConsts.DbTablePrefix + "A", CustomerConsts.DbSchema);
-        //    b.ConfigureByConvention(); //auto configure for the base class props
-        //    //...
-        //});
+       
         builder.Entity<CustomerEmail>(b =>
         {
             b.ToTable("CustomerEmails");
             b.ConfigureByConvention(); //auto configure for the base class props
-            //...
 
-            b.HasMany(e => e.EmailTypeId).WithOne(x => x.CustomerEmail).HasForeignKey(x => x.Id).IsRequired();
+            /*One to Many*/
+            b.HasOne<EmailType>().WithMany().HasForeignKey(x => x.EmailTypeId).IsRequired();
+            b.HasOne<Customers>().WithMany().HasForeignKey(x=>x.CustomerId).IsRequired();
         });
         builder.Entity<EmailType>(b =>
         {
             b.ToTable("EmailTypes");
             b.ConfigureByConvention(); //auto configure for the base class props
-            //...
         });
-        //builder.Entity<CustomerPayment>(b =>
-        //{
-        //    b.ToTable(CustomerConsts.DbTablePrefix + "A", CustomerConsts.DbSchema);
-        //    b.ConfigureByConvention(); //auto configure for the base class props
-        //    //...
-        //});
-        //builder.Entity<CustomerPaymentInfo>(b =>
-        //{
-        //    b.ToTable(CustomerConsts.DbTablePrefix + "A", CustomerConsts.DbSchema);
-        //    b.ConfigureByConvention(); //auto configure for the base class props
-        //    //...
-        //});
-        //builder.Entity<CustomerPhoneNumber>(b =>
-        //{
-        //    b.ToTable(CustomerConsts.DbTablePrefix + "A", CustomerConsts.DbSchema);
-        //    b.ConfigureByConvention(); //auto configure for the base class props
-        //    //...
-        //});
 
-        //builder.Entity<PhoneType>(b =>
-        //{
-        //    b.ToTable(CustomerConsts.DbTablePrefix + "A", CustomerConsts.DbSchema);
-        //    b.ConfigureByConvention(); //auto configure for the base class props
-        //    //...
-        //});
+        builder.Entity<CustomerPayment>(b =>
+        {
+            b.ToTable("CustomerPayments");
+            b.ConfigureByConvention(); //auto configure for the base class props
+        });
+        builder.Entity<CustomerPaymentInfo>(b =>
+        {
+            b.ToTable("CustomerPaymentInfos");
+            b.ConfigureByConvention(); //auto configure for the base class props
+
+            /*Many to many*/
+            b.HasMany(x=>x.PaymentId).WithOne().HasForeignKey(x=>x.Id).IsRequired();
+
+            /*One to many*/
+            b.HasOne<Customers>().WithMany().HasForeignKey(x => x.CustomerId).IsRequired();
+        });
+
+        builder.Entity<CustomerPhoneNumber>(b =>
+        {
+            b.ToTable("CustomerPhoneNumbers");
+            b.ConfigureByConvention(); //auto configure for the base class props
+
+            /* One to many*/
+            b.HasOne<PhoneType>().WithMany().HasForeignKey(x=>x.PhoneTypeId).IsRequired();
+            b.HasOne<Customers>().WithMany().HasForeignKey(x=> x.CustomerId).IsRequired();
+        });
+
+        builder.Entity<PhoneType>(b =>
+        {
+            b.ToTable("PhoneTypes");
+            b.ConfigureByConvention(); //auto configure for the base class props
+        });
     }
 }

@@ -10,5 +10,6 @@ namespace Acme.Customer.Entities
     public class CustomerPayment :AuditedAggregateRoot<Guid>
     {
         public string PaymentName { get; set; }
+        public CustomerPayment(Guid id):base(id) { }
     }
 }

@@ -10,6 +10,9 @@ namespace Acme.Customer.Entities
     public class EmailType : AuditedAggregateRoot<Guid>
     {
         public string EmailTypeName { get; set; }
-        public CustomerEmail CustomerEmail { get; set; }
+
+        public EmailType(Guid id) : base(id)
+        {
+        }
     }
 }

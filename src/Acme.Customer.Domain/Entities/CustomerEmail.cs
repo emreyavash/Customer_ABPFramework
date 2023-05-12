@@ -10,12 +10,14 @@ namespace Acme.Customer.Entities
 {
     public class CustomerEmail : AuditedAggregateRoot<Guid>
     {
-        public Customers CustomerId { get; set; }
-        public ICollection<EmailType> EmailTypeId { get; set; }
+        public Guid CustomerId { get; set; }
+        public Guid EmailTypeId { get; set; }
         public string Email { get; set; }
 
-        public CustomerEmail() {
-            EmailTypeId = new Collection<EmailType>();
+        public CustomerEmail(Guid customerId, Guid emailTypeId)
+        {
+            CustomerId = customerId;
+            EmailTypeId = emailTypeId;
         }
     }
 }

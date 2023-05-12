@@ -10,5 +10,9 @@ namespace Acme.Customer.Entities
     public class PhoneType : AuditedAggregateRoot<Guid>
     {
         public string PhoneTypeName { get; set; }
+
+        public PhoneType(Guid id):base(id) 
+        {
+        }
     }
 }

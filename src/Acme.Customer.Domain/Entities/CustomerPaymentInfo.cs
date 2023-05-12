@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +11,13 @@ namespace Acme.Customer.Entities
     public class CustomerPaymentInfo : AuditedAggregateRoot<Guid>
 
     {
-        public int PaymentId { get; set; }
-        public int CustomerId { get; set; }
+        public ICollection<CustomerPayment> PaymentId { get; set; }
+        public Guid CustomerId { get; set; }
+
+        public CustomerPaymentInfo( Guid customerId)
+        {
+            PaymentId =  new Collection<CustomerPayment>();
+            CustomerId = customerId;
+        }
     }
 }

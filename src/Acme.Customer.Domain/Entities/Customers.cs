@@ -15,5 +15,9 @@ namespace Acme.Customer.Entities
         public bool Gender { get; set; }
         public bool UnusualName { get; set; }
         public DateTime CreateDateTime { get; set; }
+
+        public Customers(Guid id):base(id)
+        {
+        }
     }
 }

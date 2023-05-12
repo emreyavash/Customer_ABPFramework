@@ -9,9 +9,14 @@ namespace Acme.Customer.Entities
 {
     public class CustomerPhoneNumber :AuditedAggregateRoot<Guid>
     {
-        public int CustomerId { get; set; }
-        public int PhoneTypeId { get; set; }
+        public Guid CustomerId { get; set; }
+        public Guid PhoneTypeId { get; set; }
         public string PhoneNumber { get; set; }
 
+        public CustomerPhoneNumber(Guid customerId, Guid phoneTypeId)
+        {
+            CustomerId = customerId;
+            PhoneTypeId = phoneTypeId;
+        }
     }
 }

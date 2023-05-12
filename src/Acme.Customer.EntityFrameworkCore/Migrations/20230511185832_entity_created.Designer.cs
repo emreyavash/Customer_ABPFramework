@@ -13,8 +13,8 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Acme.Customer.Migrations
 {
     [DbContext(typeof(CustomerDbContext))]
-    [Migration("20230509194111_entity_relations")]
-    partial class entityrelations
+    [Migration("20230511185832_entity_created")]
+    partial class entitycreated
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,11 +46,14 @@ namespace Acme.Customer.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("CreatorId");
 
-                    b.Property<Guid?>("CustomerIdId")
+                    b.Property<Guid>("CustomerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("EmailTypeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("nvarchar(max)")
@@ -66,7 +69,9 @@ namespace Acme.Customer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerIdId");
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("EmailTypeId");
 
                     b.ToTable("CustomerEmails", (string)null);
                 });
@@ -107,7 +112,7 @@ namespace Acme.Customer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CustomerPayments");
+                    b.ToTable("CustomerPayments", (string)null);
                 });
 
             modelBuilder.Entity("Acme.Customer.Entities.CustomerPaymentInfo", b =>
@@ -129,8 +134,8 @@ namespace Acme.Customer.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("CreatorId");
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("nvarchar(max)")
@@ -144,12 +149,11 @@ namespace Acme.Customer.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
 
-                    b.Property<int>("PaymentId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.ToTable("CustomerPaymentInfos");
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("CustomerPaymentInfos", (string)null);
                 });
 
             modelBuilder.Entity("Acme.Customer.Entities.CustomerPhoneNumber", b =>
@@ -171,8 +175,8 @@ namespace Acme.Customer.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("CreatorId");
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("nvarchar(max)")
@@ -189,12 +193,16 @@ namespace Acme.Customer.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PhoneTypeId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PhoneTypeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.ToTable("CustomerPhoneNumbers");
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("PhoneTypeId");
+
+                    b.ToTable("CustomerPhoneNumbers", (string)null);
                 });
 
             modelBuilder.Entity("Acme.Customer.Entities.Customers", b =>
@@ -326,7 +334,7 @@ namespace Acme.Customer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PhoneTypes");
+                    b.ToTable("PhoneTypes", (string)null);
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
@@ -1955,22 +1963,50 @@ namespace Acme.Customer.Migrations
 
             modelBuilder.Entity("Acme.Customer.Entities.CustomerEmail", b =>
                 {
-                    b.HasOne("Acme.Customer.Entities.Customers", "CustomerId")
+                    b.HasOne("Acme.Customer.Entities.Customers", null)
                         .WithMany()
-                        .HasForeignKey("CustomerIdId");
-
-                    b.Navigation("CustomerId");
-                });
-
-            modelBuilder.Entity("Acme.Customer.Entities.EmailType", b =>
-                {
-                    b.HasOne("Acme.Customer.Entities.CustomerEmail", "CustomerEmail")
-                        .WithMany("EmailTypeId")
-                        .HasForeignKey("Id")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CustomerEmail");
+                    b.HasOne("Acme.Customer.Entities.EmailType", null)
+                        .WithMany()
+                        .HasForeignKey("EmailTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Acme.Customer.Entities.CustomerPayment", b =>
+                {
+                    b.HasOne("Acme.Customer.Entities.CustomerPaymentInfo", null)
+                        .WithMany("PaymentId")
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Acme.Customer.Entities.CustomerPaymentInfo", b =>
+                {
+                    b.HasOne("Acme.Customer.Entities.Customers", null)
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Acme.Customer.Entities.CustomerPhoneNumber", b =>
+                {
+                    b.HasOne("Acme.Customer.Entities.Customers", null)
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Acme.Customer.Entities.PhoneType", null)
+                        .WithMany()
+                        .HasForeignKey("PhoneTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogAction", b =>
@@ -2115,9 +2151,9 @@ namespace Acme.Customer.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Acme.Customer.Entities.CustomerEmail", b =>
+            modelBuilder.Entity("Acme.Customer.Entities.CustomerPaymentInfo", b =>
                 {
-                    b.Navigation("EmailTypeId");
+                    b.Navigation("PaymentId");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
