@@ -34,6 +34,7 @@ public class CustomerDbContext :
     public DbSet<Customers> Customers { get; set; }
     public DbSet<EmailType> EmailTypes { get; set; }
     public DbSet<PhoneType> PhoneTypes { get; set; }
+    public DbSet<Deneme> Denemes { get; set; }
     #region Entities from the modules
 
     /* Notice: We only implemented IIdentityDbContext and ITenantManagementDbContext

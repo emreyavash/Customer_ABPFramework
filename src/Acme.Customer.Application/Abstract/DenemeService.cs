@@ -7,35 +7,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.ObjectMapping;
 
 namespace Acme.Customer.Abstract
 {
-    public class CustomerAppService :CrudAppService<
-        Customers,
-        CustomerDTO,
-        Guid,
-        PagedAndSortedResultRequestDto,
-        CreateUpdateCustomerDTO>,ICustomerAppService
+    public class DenemeService : ApplicationService, IDenemeService
     {
-        private readonly IRepository<Customers, Guid> _repository;
-        public CustomerAppService(IRepository<Customers,Guid> repository):base(repository) {
+        private readonly IRepository<Deneme, Guid> _repository;
+
+        public DenemeService(IRepository<Deneme, Guid> repository)
+        {
             _repository = repository;
         }
 
-        public async Task CreateCustomer(CreateUpdateCustomerDTO customerDTO)
+        public async Task CreateDeneme(CreateDenemeDTO customerDTO)
+
         {
             var checkName = CheckUnusualName(customerDTO.FirstName);
-            var customer = new Customers(
+
+            var customer = new Deneme(
                 GuidGenerator.Create()
                 );
-            customer.FirstName = customerDTO.FirstName;
-            customer.LastName = customerDTO.LastName;
+            customer.FirstName= customerDTO.FirstName;
+            customer.LastName= customerDTO.LastName;
             customer.TcNo = customerDTO.TcNo;
-            customer.Gender = customerDTO.Gender;
-            customer.CreateDateTime = customerDTO.CreateDateTime;
             if (checkName)
             {
                 customer.UnusualName = checkName;
@@ -50,6 +47,14 @@ namespace Acme.Customer.Abstract
 
         }
 
+        public async Task<List<DenemeDTO>> GetCustomers()
+        {
+            
+            var result = await _repository.GetListAsync();
+            return ObjectMapper.Map<List<Deneme>,List<DenemeDTO>>(result);
+        }
+
+
         private bool CheckUnusualName(string firstName)
         {
             char[] sesliHarfler = { 'a', 'e', 'ı', 'i', 'o', 'ö', 'u', 'ü' };
@@ -57,20 +62,19 @@ namespace Acme.Customer.Abstract
             Array.Sort(charArr);
             int sayac = 0;
             var checkSesliHarf = charArr.Where(x => x.IsIn(sesliHarfler));
-            if (checkSesliHarf.Count() >= 3)
+            if (checkSesliHarf.Count()>=3)
             {
                 var number = checkSesliHarf.Count();
                 for (int i = 1; i < charArr.Length; i++)
                 {
                     if (charArr[i - 1] == charArr[i])
-                        sayac++;
+                        sayac++;                   
                 }
-            }
-            if (sayac >= 2)
-                return true;
-            else
+            }          
+            if (sayac >= 2)            
+                return true;           
+            else            
                 return false;
         }
-
     }
 }

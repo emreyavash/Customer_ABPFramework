@@ -1,6 +1,8 @@
-﻿using Acme.Customer.Create_UpdateDTO;
+﻿using Acme.Customer.Abstract;
+using Acme.Customer.Create_UpdateDTO;
 using Acme.Customer.DTOs;
 using Acme.Customer.Entities;
+using Acme.Customer.İnterface;
 using AutoMapper;
 
 namespace Acme.Customer;
@@ -30,6 +32,9 @@ public class CustomerApplicationAutoMapperProfile : Profile
         CreateMap<CreateUpdateCustomerEmailDTO, CustomerEmail>();
         CreateMap<CreateUpdateEmailTypeDTO,EmailType>();
 
+        CreateMap<IDenemeService, DenemeService>();
+        CreateMap<Deneme, DenemeDTO>();
+        CreateMap<CreateDenemeDTO, Deneme>();
         
 
     }
