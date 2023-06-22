@@ -3,20 +3,18 @@ using Acme.Customer.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
 namespace Acme.Customer.İnterface
 {
-    public interface ICustomerAppService :ICrudAppService<
-        CustomerDTO,
+    public interface IAddressTypeService : ICrudAppService<
+        AddressTypeDTO,
         Guid,
         PagedAndSortedResultRequestDto,
-        CreateUpdateCustomerDTO>
+        CreateUpdateAddressTypeDTO,
+        CreateUpdateAddressTypeDTO
+        >
     {
-        Task CreateCustomer(CreateUpdateCustomerDTO customerDTO);
-        Task DeleteCustomer(Guid id);
-        Task<List<CustomerDTO>> GetCustomers();
     }
 }

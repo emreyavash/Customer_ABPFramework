@@ -33,6 +33,8 @@ public class CustomerDbContext :
     public DbSet<CustomerPhoneNumber> CustomerPhoneNumbers { get; set; }
     public DbSet<Customers> Customers { get; set; }
     public DbSet<EmailType> EmailTypes { get; set; }
+    public DbSet<AddressType> AddressTypes { get; set; }
+    public DbSet<CustomerAddress> CustomerAddresses { get; set; }
     public DbSet<PhoneType> PhoneTypes { get; set; }
     public DbSet<Deneme> Denemes { get; set; }
     #region Entities from the modules
@@ -100,7 +102,6 @@ public class CustomerDbContext :
             b.ToTable("EmailTypes");
             b.ConfigureByConvention(); //auto configure for the base class props
         });
-
         builder.Entity<CustomerPayment>(b =>
         {
             b.ToTable("CustomerPayments");
@@ -127,11 +128,25 @@ public class CustomerDbContext :
             b.HasOne<PhoneType>().WithMany().HasForeignKey(x=>x.PhoneTypeId).IsRequired();
             b.HasOne<Customers>().WithMany().HasForeignKey(x=> x.CustomerId).IsRequired();
         });
-
         builder.Entity<PhoneType>(b =>
         {
             b.ToTable("PhoneTypes");
             b.ConfigureByConvention(); //auto configure for the base class props
         });
+        builder.Entity<CustomerAddress>(b =>
+        {
+            b.ToTable("CustomerAddresses");
+            b.ConfigureByConvention(); //auto configure for the base class props
+
+            /* One to many*/
+            b.HasOne<AddressType>().WithMany().HasForeignKey(x => x.AddressId).IsRequired();
+            b.HasOne<Customers>().WithMany().HasForeignKey(x => x.CustomerId).IsRequired();
+        });
+        builder.Entity<AddressType>(b =>
+        {
+            b.ToTable("AddressTypes");
+            b.ConfigureByConvention(); //auto configure for the base class props
+        });
+
     }
 }

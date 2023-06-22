@@ -19,6 +19,11 @@ public class CustomerApplicationAutoMapperProfile : Profile
         CreateMap<CreateUpdateCustomerPaymentDTO, CustomerPayment>();
         CreateMap<CreateUpdateCustomerPaymentInfoDTO, CustomerPaymentInfo>();
 
+        CreateMap<CustomerAddress, CustomerAddressDTO>();
+        CreateMap<AddressType, AddressTypeDTO>();
+        CreateMap<CreateUpdateCustomerAddressDTO, CustomerAddress>();
+        CreateMap<CreateUpdateAddressTypeDTO, AddressType>();
+
         CreateMap<CustomerPhoneNumber, CustomerPhoneNumberDTO>();
         CreateMap<PhoneType, PhoneTypeDTO>();
         CreateMap<CreateUpdateCustomerPhoneNumberDTO, CustomerPhoneNumber>();

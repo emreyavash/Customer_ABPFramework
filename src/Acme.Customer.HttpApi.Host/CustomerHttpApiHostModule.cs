@@ -211,7 +211,7 @@ public class CustomerHttpApiHostModule : AbpModule
             c.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
             c.OAuthScopes("Customer");
         });
-
+      
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
         app.UseConfiguredEndpoints();

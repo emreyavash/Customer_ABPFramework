@@ -4,6 +4,7 @@ using Acme.Customer.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -12,9 +13,11 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Acme.Customer.Migrations
 {
     [DbContext(typeof(CustomerDbContext))]
-    partial class CustomerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230529093413_address_entity")]
+    partial class addressentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,7 +63,7 @@ namespace Acme.Customer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AddressTypes");
+                    b.ToTable("AddressTypes", (string)null);
                 });
 
             modelBuilder.Entity("Acme.Customer.Entities.CustomerAddress", b =>
@@ -197,7 +200,7 @@ namespace Acme.Customer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CustomerPayments");
+                    b.ToTable("CustomerPayments", (string)null);
                 });
 
             modelBuilder.Entity("Acme.Customer.Entities.CustomerPaymentInfo", b =>
@@ -412,7 +415,7 @@ namespace Acme.Customer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EmailTypes");
+                    b.ToTable("EmailTypes", (string)null);
                 });
 
             modelBuilder.Entity("Acme.Customer.Entities.PhoneType", b =>
@@ -451,7 +454,7 @@ namespace Acme.Customer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PhoneTypes");
+                    b.ToTable("PhoneTypes", (string)null);
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>

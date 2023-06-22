@@ -27,7 +27,6 @@ namespace Acme.Customer.Abstract
 
         public async Task CreateCustomer(CreateUpdateCustomerDTO customerDTO)
         {
-            var checkName = CheckUnusualName(customerDTO.FirstName);
             var customer = new Customers(
                 GuidGenerator.Create()
                 );
@@ -36,34 +35,45 @@ namespace Acme.Customer.Abstract
             customer.TcNo = customerDTO.TcNo;
             customer.Gender = customerDTO.Gender;
             customer.CreateDateTime = customerDTO.CreateDateTime;
-            if (checkName)
-            {
-                customer.UnusualName = checkName;
+            var checkName = CheckUnusualName(customerDTO.FirstName);
+            customer.UnusualName = checkName;
 
-            }
-            else
-            {
-                customer.UnusualName = checkName;
-
-            }
+           
             await _repository.InsertAsync(customer);
 
+        }
+
+        public async Task DeleteCustomer(Guid id)
+        {
+            await _repository.DeleteAsync(id);
+
+        }
+
+        public async Task<List<CustomerDTO>> GetCustomers()
+        {
+            var customers = await _repository.GetListAsync();
+            return ObjectMapper.Map<List<Customers>,List<CustomerDTO>>(customers);
         }
 
         private bool CheckUnusualName(string firstName)
         {
             char[] sesliHarfler = { 'a', 'e', 'ı', 'i', 'o', 'ö', 'u', 'ü' };
-            char[] charArr = firstName.ToLower().ToCharArray();
-            Array.Sort(charArr);
+            List<Char> charArr = firstName.ToLower().Where(x => x.IsIn(sesliHarfler)).OrderBy(x=>x).ToList();      
             int sayac = 0;
-            var checkSesliHarf = charArr.Where(x => x.IsIn(sesliHarfler));
-            if (checkSesliHarf.Count() >= 3)
+            if (charArr.Count() >= 3)
             {
-                var number = checkSesliHarf.Count();
-                for (int i = 1; i < charArr.Length; i++)
+                for (int i = 1; i < charArr.Count; i++)
                 {
                     if (charArr[i - 1] == charArr[i])
+                    {
                         sayac++;
+                        if (sayac >= 2)
+                            break;
+                    }
+                    else
+                    {
+                        sayac = 0;
+                    }
                 }
             }
             if (sayac >= 2)
