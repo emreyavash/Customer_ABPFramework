@@ -20,8 +20,17 @@ namespace Acme.Customer.Abstract
         PagedAndSortedResultRequestDto,
         CreateUpdateCustomerEmailDTO>, ICustomerEmailService
     {
+        private readonly IRepository<CustomerEmail,Guid> _repository;
         public CustomerEmailService(IRepository<CustomerEmail, Guid> repository) : base(repository)
         {
+            _repository = repository;
+        }
+
+        public async Task<CustomerEmailDTO> GetEmailByCustomerId(Guid customerId)
+        {
+            var customerEmail = await _repository.FindAsync(x=>x.CustomerId == customerId);
+            return ObjectMapper.Map<CustomerEmail, CustomerEmailDTO>(customerEmail);
+
         }
     }
 }

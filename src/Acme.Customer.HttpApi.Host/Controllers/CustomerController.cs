@@ -39,5 +39,11 @@ namespace Acme.Customer.Controllers
             var customers = await _customerService.GetCustomers();
             return Ok(customers);
         }
+        [HttpGet("GetCustomerById")]
+        public async Task<IActionResult> GetCustomerById(Guid id)
+        {
+            var customer = await _customerService.GetCustomerById(id);
+            return Ok(customer);
+        }
     }
 }

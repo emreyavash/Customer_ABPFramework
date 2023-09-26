@@ -13,10 +13,12 @@ namespace Acme.Customer.Entities
         public Guid PhoneTypeId { get; set; }
         public string PhoneNumber { get; set; }
 
-        public CustomerPhoneNumber(Guid customerId, Guid phoneTypeId)
+        public CustomerPhoneNumber(Guid id):base(id)
         {
-            CustomerId = customerId;
-            PhoneTypeId = phoneTypeId;
+        }
+
+        private CustomerPhoneNumber()
+        {
         }
     }
 }

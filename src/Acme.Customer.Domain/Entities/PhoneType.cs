@@ -14,5 +14,9 @@ namespace Acme.Customer.Entities
         public PhoneType(Guid id):base(id) 
         {
         }
+
+        private PhoneType()
+        {
+        }
     }
 }

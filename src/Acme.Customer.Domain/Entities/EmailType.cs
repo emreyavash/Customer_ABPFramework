@@ -14,5 +14,9 @@ namespace Acme.Customer.Entities
         public EmailType(Guid id) : base(id)
         {
         }
+
+        private EmailType()
+        {
+        }
     }
 }

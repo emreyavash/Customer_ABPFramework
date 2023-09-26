@@ -9,14 +9,12 @@ using Volo.Abp.Application.Services;
 
 namespace Acme.Customer.İnterface
 {
-    public interface ICustomerAppService :ICrudAppService<
-        CustomerDTO,
-        Guid,
-        PagedAndSortedResultRequestDto,
-        CreateUpdateCustomerDTO>
+    public interface ICustomerAppService :IApplicationService
     {
         Task CreateCustomer(CreateUpdateCustomerDTO customerDTO);
         Task DeleteCustomer(Guid id);
         Task<List<CustomerDTO>> GetCustomers();
+        Task<CustomerDTO> GetCustomerById(Guid id);
+
     }
 }

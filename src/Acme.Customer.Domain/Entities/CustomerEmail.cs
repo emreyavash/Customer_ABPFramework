@@ -14,10 +14,10 @@ namespace Acme.Customer.Entities
         public Guid EmailTypeId { get; set; }
         public string Email { get; set; }
 
-        public CustomerEmail(Guid customerId, Guid emailTypeId)
+        public CustomerEmail(Guid id):base(id) 
         {
-            CustomerId = customerId;
-            EmailTypeId = emailTypeId;
+            
         }
+        private CustomerEmail() { }
     }
 }

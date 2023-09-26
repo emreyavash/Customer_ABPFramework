@@ -12,9 +12,10 @@ namespace Acme.Customer.Entities
         public Guid CustomerId { get; set; }
         public Guid AddressId { get; set; }
         public string Address { get; set; }
-        public CustomerAddress(Guid customerId,Guid addressId) {
-            CustomerId = customerId;
-            AddressId = addressId;
+        public CustomerAddress(Guid id):base(id) {
+            
         }
+        private CustomerAddress() { }
+
     }
 }

@@ -7,8 +7,8 @@ namespace Acme.Customer.DTOs
 {
     public class CustomerPhoneNumberDTO : AuditedEntityDto<Guid>
     {
-        public int CustomerId { get; set; }
-        public int PhoneTypeId { get; set; }
+        public Guid CustomerId { get; set; }
+        public Guid PhoneTypeId { get; set; }
         public string PhoneNumber { get; set; }
     }
 }

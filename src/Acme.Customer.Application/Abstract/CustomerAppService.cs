@@ -10,18 +10,18 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Identity;
+using System.Linq.Dynamic.Core;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Acme.Customer.Abstract
 {
-    public class CustomerAppService :CrudAppService<
-        Customers,
-        CustomerDTO,
-        Guid,
-        PagedAndSortedResultRequestDto,
-        CreateUpdateCustomerDTO>,ICustomerAppService
+    public class CustomerAppService :ApplicationService,ICustomerAppService
     {
         private readonly IRepository<Customers, Guid> _repository;
-        public CustomerAppService(IRepository<Customers,Guid> repository):base(repository) {
+
+        public CustomerAppService(IRepository<Customers, Guid> repository)
+        {
             _repository = repository;
         }
 
@@ -35,6 +35,52 @@ namespace Acme.Customer.Abstract
             customer.TcNo = customerDTO.TcNo;
             customer.Gender = customerDTO.Gender;
             customer.CreateDateTime = customerDTO.CreateDateTime;
+            customer.CustomerAddresses = new List<CustomerAddress>();
+            foreach (var ca in customerDTO.CustomerAddresses)
+            {
+                var customerAddress = new CustomerAddress(GuidGenerator.Create())
+                {
+                    CustomerId = customer.Id,
+                    AddressId = ca.AddressId,
+                    Address =ca.Address,
+                  
+                    
+                };
+                customer.CustomerAddresses.Add(customerAddress);
+            }
+            customer.CustomerPhoneNumbers = new List<CustomerPhoneNumber>();
+            foreach (var cp in customerDTO.CustomerPhoneNumbers)
+            {
+                var customerPhoneNumber = new CustomerPhoneNumber(GuidGenerator.Create())
+                {
+                    CustomerId = customer.Id,
+                    PhoneTypeId = cp.PhoneTypeId,
+                    PhoneNumber = cp.PhoneNumber,
+                };
+                customer.CustomerPhoneNumbers.Add(customerPhoneNumber);
+            }
+            customer.CustomerEmails = new List<CustomerEmail>();
+            foreach (var ce in customerDTO.CustomerEmails)
+            {
+                var customerEmails = new CustomerEmail(GuidGenerator.Create())
+                {
+                    CustomerId = customer.Id,
+                    Email = ce.Email,
+                    EmailTypeId = ce.EmailTypeId,
+                };
+                customer.CustomerEmails.Add(customerEmails);
+            }
+            customer.CustomerPaymentInfos = new List<CustomerPaymentInfo>();
+            foreach(var cp in customerDTO.CustomerPaymentInfos)
+            {
+                var customerPaymentInfos = new CustomerPaymentInfo(GuidGenerator.Create())
+                {
+                    CustomerId = customer.Id,
+                    PaymentId = cp.PaymentId,
+                    
+                };
+                customer.CustomerPaymentInfos.Add(customerPaymentInfos);
+            }
             var checkName = CheckUnusualName(customerDTO.FirstName);
             customer.UnusualName = checkName;
 
@@ -51,9 +97,17 @@ namespace Acme.Customer.Abstract
 
         public async Task<List<CustomerDTO>> GetCustomers()
         {
-            var customers = await _repository.GetListAsync();
+            var queryable = await _repository.WithDetailsAsync(x => x.CustomerAddresses,x=>x.CustomerEmails,x=>x.CustomerPhoneNumbers,x=>x.CustomerPaymentInfos);
+            var customers =  queryable.ToList();
             return ObjectMapper.Map<List<Customers>,List<CustomerDTO>>(customers);
         }
+        public async Task<CustomerDTO> GetCustomerById(Guid id)
+        {
+            var queryable = await _repository.WithDetailsAsync(x => x.CustomerAddresses, x => x.CustomerEmails, x => x.CustomerPhoneNumbers, x => x.CustomerPaymentInfos);
+            var customer = queryable.FirstOrDefault(x=>x.Id ==id);
+            return ObjectMapper.Map<Customers, CustomerDTO>(customer);
+        }
+        
 
         private bool CheckUnusualName(string firstName)
         {

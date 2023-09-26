@@ -15,7 +15,6 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
-
 namespace Acme.Customer.EntityFrameworkCore;
 
 [ReplaceDbContext(typeof(IIdentityDbContext))]
@@ -86,7 +85,18 @@ public class CustomerDbContext :
         builder.ConfigureTenantManagement();
 
         /* Configure your own tables/entities inside here */
+        builder.Entity<Customers>(c =>
+        {
+            c.ToTable("Customers");
 
+            c.ConfigureByConvention();
+
+
+            c.HasMany(x=>x.CustomerPhoneNumbers).WithOne().HasForeignKey(x=>x.CustomerId).IsRequired();
+            c.HasMany(x=>x.CustomerAddresses).WithOne().HasForeignKey(x=>x.CustomerId).IsRequired();
+            c.HasMany(x=>x.CustomerEmails).WithOne().HasForeignKey(x=>x.CustomerId).IsRequired();
+
+        });
        
         builder.Entity<CustomerEmail>(b =>
         {
@@ -113,10 +123,10 @@ public class CustomerDbContext :
             b.ConfigureByConvention(); //auto configure for the base class props
 
             /*Many to many*/
-            b.HasMany(x=>x.PaymentId).WithOne().HasForeignKey(x=>x.Id).IsRequired();
+            b.HasOne<CustomerPayment>().WithMany().HasForeignKey(x=>x.PaymentId);
 
             /*One to many*/
-            b.HasOne<Customers>().WithMany().HasForeignKey(x => x.CustomerId).IsRequired();
+            b.HasOne<Customers>().WithMany().HasForeignKey(x => x.CustomerId);
         });
 
         builder.Entity<CustomerPhoneNumber>(b =>

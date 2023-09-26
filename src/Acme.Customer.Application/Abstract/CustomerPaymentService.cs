@@ -18,7 +18,9 @@ namespace Acme.Customer.Abstract
         CustomerPaymentDTO,
         Guid,
         PagedAndSortedResultRequestDto,
-        CreateUpdateCustomerPaymentDTO>, ICustomerPaymentService
+        CreateUpdateCustomerPaymentDTO,
+        CreateUpdateCustomerPaymentDTO>
+        , ICustomerPaymentService
     {
         public CustomerPaymentService(IRepository<CustomerPayment, Guid> repository) : base(repository)
         {

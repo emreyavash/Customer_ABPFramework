@@ -12,8 +12,11 @@ namespace Acme.Customer.DTOs
         public string TcNo { get; set; }
         public bool Gender { get; set; }
         public bool UnusualName { get; set; }
-        //public List<CustomerAddress> CustomerAddresses { get; set; }
-        //public List<CustomerPhoneNumber> CustomerPhoneNumbers { get; set; }
+        public ICollection<CustomerAddressDTO> CustomerAddresses { get; set; }
+        public ICollection<CustomerPhoneNumberDTO> CustomerPhoneNumbers { get; set; }
+        public ICollection<CustomerEmailDTO> CustomerEmails { get; set; }
+        public ICollection<CustomerPaymentInfoDTO> CustomerPayments { get; set; }
+
         public DateTime CreateDateTime { get; set; }
     }
 }

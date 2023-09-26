@@ -11,13 +11,17 @@ namespace Acme.Customer.Entities
     public class CustomerPaymentInfo : AuditedAggregateRoot<Guid>
 
     {
-        public ICollection<CustomerPayment> PaymentId { get; set; }
+        public Guid PaymentId { get; set; }
         public Guid CustomerId { get; set; }
+        
 
-        public CustomerPaymentInfo( Guid customerId)
+        public CustomerPaymentInfo( Guid id):base(id)
         {
-            PaymentId =  new Collection<CustomerPayment>();
-            CustomerId = customerId;
+      
+        }
+
+        private CustomerPaymentInfo()
+        {
         }
     }
 }

@@ -11,5 +11,6 @@ namespace Acme.Customer.Entities
     {
         public string PaymentName { get; set; }
         public CustomerPayment(Guid id):base(id) { }
+        private CustomerPayment() { }
     }
 }

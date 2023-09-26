@@ -32,9 +32,23 @@ public class Program
             builder.Host.AddAppSettingsSecretsJson()
                 .UseAutofac()
                 .UseSerilog();
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+
+                        //you can configure your custom policy
+                        builder.WithOrigins("http://localhost:3000").AllowAnyOrigin()
+                                            .AllowAnyHeader()
+                                            .AllowAnyMethod();
+                    });
+            });
             await builder.AddApplicationAsync<CustomerHttpApiHostModule>();
             var app = builder.Build();
             await app.InitializeApplicationAsync();
+            app.UseCors();
+
             await app.RunAsync();
             return 0;
         }

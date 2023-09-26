@@ -7,7 +7,8 @@ namespace Acme.Customer.DTOs
 {
     public class CustomerPaymentInfoDTO : AuditedEntityDto<Guid>
     {
-        public int PaymentId { get; set; }
-        public int CustomerId { get; set; }
+        public Guid PaymentId { get; set; }
+
+        public Guid CustomerId { get; set; }
     }
 }

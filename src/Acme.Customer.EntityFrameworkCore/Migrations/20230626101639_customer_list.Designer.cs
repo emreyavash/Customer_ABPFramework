@@ -4,6 +4,7 @@ using Acme.Customer.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -12,9 +13,11 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Acme.Customer.Migrations
 {
     [DbContext(typeof(CustomerDbContext))]
-    partial class CustomerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230626101639_customer_list")]
+    partial class customerlist
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,9 +142,6 @@ namespace Acme.Customer.Migrations
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CustomersId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
@@ -163,8 +163,6 @@ namespace Acme.Customer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("CustomersId");
 
                     b.HasIndex("EmailTypeId");
 
@@ -232,9 +230,6 @@ namespace Acme.Customer.Migrations
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CustomersId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
@@ -247,16 +242,9 @@ namespace Acme.Customer.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
 
-                    b.Property<Guid>("PaymentId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("CustomersId");
-
-                    b.HasIndex("PaymentId");
 
                     b.ToTable("CustomerPaymentInfos", (string)null);
                 });
@@ -2114,13 +2102,18 @@ namespace Acme.Customer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Acme.Customer.Entities.Customers", null)
-                        .WithMany("CustomerEmails")
-                        .HasForeignKey("CustomersId");
-
                     b.HasOne("Acme.Customer.Entities.EmailType", null)
                         .WithMany()
                         .HasForeignKey("EmailTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Acme.Customer.Entities.CustomerPayment", b =>
+                {
+                    b.HasOne("Acme.Customer.Entities.CustomerPaymentInfo", null)
+                        .WithMany("PaymentId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -2130,16 +2123,6 @@ namespace Acme.Customer.Migrations
                     b.HasOne("Acme.Customer.Entities.Customers", null)
                         .WithMany()
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Acme.Customer.Entities.Customers", null)
-                        .WithMany("CustomerPaymentInfos")
-                        .HasForeignKey("CustomersId");
-
-                    b.HasOne("Acme.Customer.Entities.CustomerPayment", null)
-                        .WithMany()
-                        .HasForeignKey("PaymentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -2305,13 +2288,14 @@ namespace Acme.Customer.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Acme.Customer.Entities.CustomerPaymentInfo", b =>
+                {
+                    b.Navigation("PaymentId");
+                });
+
             modelBuilder.Entity("Acme.Customer.Entities.Customers", b =>
                 {
                     b.Navigation("CustomerAddresses");
-
-                    b.Navigation("CustomerEmails");
-
-                    b.Navigation("CustomerPaymentInfos");
 
                     b.Navigation("CustomerPhoneNumbers");
                 });

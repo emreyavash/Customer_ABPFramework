@@ -15,5 +15,9 @@ namespace Acme.Customer.Entities
         {
             
         }
+
+        private AddressType()
+        {
+        }
     }
 }
